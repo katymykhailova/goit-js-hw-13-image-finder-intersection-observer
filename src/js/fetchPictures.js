@@ -62,7 +62,7 @@ function clearPicturesContainer() {
   refs.picturesContainer.innerHTML = '';
 }
 
-const options = { rootMargin: '150px' };
+const options = { rootMargin: '200px' };
 const onEntry = (entries, observer) => {
   entries.forEach(entry => {
     if (entry.isIntersecting && newsApiService.query !== '') {
