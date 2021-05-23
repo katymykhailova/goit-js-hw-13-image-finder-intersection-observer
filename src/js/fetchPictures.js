@@ -12,34 +12,15 @@ import galleryTpl from '../template/pictures.hbs';
 
 // modules
 import NewsApiService from './apiService';
-import LoadMoreBtn from './components/load-more-btn';
 
 // refs
 import getRefs from './components/get-refs';
 
 // variables
 const newsApiService = new NewsApiService();
-const loadMoreBtn = new LoadMoreBtn({
-  selector: '[data-action="load-more"]',
-  hidden: true,
-});
 const refs = getRefs();
-const heightFormContainer = refs.formContainer.clientHeight;
-let heightGalleryContainer = 0;
 
 refs.searchForm.addEventListener('submit', onSearch);
-loadMoreBtn.refs.button.addEventListener('click', fetchPictures);
-
-function scrollTo() {
-  if (heightGalleryContainer === 0) {
-    return;
-  }
-
-  window.scrollTo({
-    top: heightGalleryContainer + heightFormContainer,
-    behavior: 'smooth',
-  });
-}
 
 function onSearch(e) {
   e.preventDefault();
@@ -51,7 +32,6 @@ function onSearch(e) {
       text: 'You must enter query parameters. Try again',
     });
   }
-  loadMoreBtn.show();
   newsApiService.resetPage();
   clearPicturesContainer();
   fetchPictures();
@@ -60,17 +40,13 @@ function onSearch(e) {
 
 async function fetchPictures() {
   try {
-    loadMoreBtn.disable();
     const hits = await newsApiService.fetchPictures();
     if (hits.length == 0) {
-      loadMoreBtn.hide();
       return info({
         text: 'No country has been found. Please enter a more specific query!',
       });
     }
     appendPicturesMarkup(hits);
-    loadMoreBtn.enable();
-    scrollTo();
   } catch (error) {
     info({
       text: 'Sorry. we cannot process your request!',
@@ -79,10 +55,20 @@ async function fetchPictures() {
 }
 
 function appendPicturesMarkup(pictures) {
-  heightGalleryContainer = refs.galleryContainer.clientHeight;
   refs.picturesContainer.insertAdjacentHTML('beforeend', galleryTpl(pictures));
 }
 
 function clearPicturesContainer() {
   refs.picturesContainer.innerHTML = '';
 }
+
+const options = { rootMargin: '150px' };
+const onEntry = (entries, observer) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && newsApiService.query !== '') {
+      fetchPictures();
+    }
+  });
+};
+const observer = new IntersectionObserver(onEntry, options);
+observer.observe(refs.sentinelEl);

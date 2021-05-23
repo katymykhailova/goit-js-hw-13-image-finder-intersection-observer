@@ -3,7 +3,7 @@ export default function getRefs() {
     searchForm: document.querySelector('#search-form'),
     picturesContainer: document.querySelector('.gallery'),
     galleryContainer: document.querySelector('.gallery-container'),
-    formContainer: document.querySelector('.form-container'),
+    sentinelEl: document.querySelector('#sentinel'),
     bodyEl: document.body,
   };
 }
