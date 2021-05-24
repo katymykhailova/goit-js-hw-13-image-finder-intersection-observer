@@ -7,6 +7,8 @@ import '@pnotify/core/dist/BrightTheme.css';
 import '@pnotify/core/dist/PNotify.css';
 import '@pnotify/bootstrap4/dist/PNotifyBootstrap4.css';
 
+import 'lazysizes';
+
 // templates
 import galleryTpl from '../template/pictures.hbs';
 
@@ -56,6 +58,20 @@ async function fetchPictures() {
 
 function appendPicturesMarkup(pictures) {
   refs.picturesContainer.insertAdjacentHTML('beforeend', galleryTpl(pictures));
+  lazySizesMarkup();
+}
+
+function lazySizesMarkup() {
+  const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+  if ('loading' in HTMLImageElement.prototype) {
+    lazyImages.forEach(img => {
+      img.src = img.dataset.src;
+    });
+  } else {
+    lazyImages.forEach(img => {
+      img.classList.add('lazyload');
+    });
+  }
 }
 
 function clearPicturesContainer() {
