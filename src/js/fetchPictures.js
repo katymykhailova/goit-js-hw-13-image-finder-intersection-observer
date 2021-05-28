@@ -13,13 +13,13 @@ import 'lazysizes';
 import galleryTpl from '../template/pictures.hbs';
 
 // modules
-import NewsApiService from './apiService';
+import PicturesApiService from './apiService';
 
 // refs
 import getRefs from './components/get-refs';
 
 // variables
-const newsApiService = new NewsApiService();
+const picturesApiService = new PicturesApiService();
 const refs = getRefs();
 
 refs.searchForm.addEventListener('submit', onSearch);
@@ -27,14 +27,14 @@ refs.searchForm.addEventListener('submit', onSearch);
 function onSearch(e) {
   e.preventDefault();
 
-  newsApiService.query = e.currentTarget.elements.query.value.trim();
+  picturesApiService.query = e.currentTarget.elements.query.value.trim();
 
-  if (newsApiService.query === '') {
+  if (picturesApiService.query === '') {
     return info({
       text: 'You must enter query parameters. Try again',
     });
   }
-  newsApiService.resetPage();
+  picturesApiService.resetPage();
   clearPicturesContainer();
   fetchPictures();
   e.currentTarget.elements.query.value = '';
@@ -42,7 +42,7 @@ function onSearch(e) {
 
 async function fetchPictures() {
   try {
-    const hits = await newsApiService.fetchPictures();
+    const hits = await picturesApiService.fetchPictures();
     if (hits.length == 0) {
       return info({
         text: 'No country has been found. Please enter a more specific query!',
@@ -78,13 +78,26 @@ function clearPicturesContainer() {
   refs.picturesContainer.innerHTML = '';
 }
 
+// const hasQuery = picturesApiService.query !== '';
+// const isNextRequest = picturesApiService.page > 1;
+// if (entry.isIntersecting && hasQuery && isNextRequest) {
+//   picturesApiService.fetchPictures().then(onMakeGallery).catch(onFetchError);
+// }
+
 const options = { rootMargin: '200px' };
 const onEntry = (entries, observer) => {
   entries.forEach(entry => {
-    if (entry.isIntersecting && newsApiService.query !== '') {
+    if (entry.isIntersecting && picturesApiService.query !== '' && picturesApiService.page > 1) {
       fetchPictures();
     }
   });
 };
 const observer = new IntersectionObserver(onEntry, options);
 observer.observe(refs.sentinelEl);
+
+// прелоад картинки для модалки
+// показываем картинку прелоад
+// document.querySelector('img').addEventListener('load', e => {
+//   console.log(e);
+//   // тут подставляем уже загруженное изображение
+// });

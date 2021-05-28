@@ -5,7 +5,7 @@
   "main": "index.js",
   "homepage": "https://kotikm81.github.io/goit-js-hw-13-image-finder-intersection-observer",
   "scripts": {
-    "dev": "parcel src/*.html",
+    "dev": "parcel src/*.html --open",
     "build": "parcel build src/*.html --public-url /goit-js-hw-13-image-finder-intersection-observer/"
   },
   "repository": {
