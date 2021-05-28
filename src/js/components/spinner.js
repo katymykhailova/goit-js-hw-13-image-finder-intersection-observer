@@ -3,8 +3,8 @@ import 'spin.js/spin.css';
 
 const opts = {
   lines: 13, // The number of lines to draw
-  length: 38, // The length of each line
-  width: 17, // The line thickness
+  length: 0, // The length of each line
+  width: 15, // The line thickness
   radius: 45, // The radius of the inner circle
   scale: 1, // Scales overall size of the spinner
   corners: 1, // Corner roundness (0..1)
