@@ -78,12 +78,6 @@ function clearPicturesContainer() {
   refs.picturesContainer.innerHTML = '';
 }
 
-// const hasQuery = picturesApiService.query !== '';
-// const isNextRequest = picturesApiService.page > 1;
-// if (entry.isIntersecting && hasQuery && isNextRequest) {
-//   picturesApiService.fetchPictures().then(onMakeGallery).catch(onFetchError);
-// }
-
 const options = { rootMargin: '200px' };
 const onEntry = (entries, observer) => {
   entries.forEach(entry => {
@@ -94,10 +88,3 @@ const onEntry = (entries, observer) => {
 };
 const observer = new IntersectionObserver(onEntry, options);
 observer.observe(refs.sentinelEl);
-
-// прелоад картинки для модалки
-// показываем картинку прелоад
-// document.querySelector('img').addEventListener('load', e => {
-//   console.log(e);
-//   // тут подставляем уже загруженное изображение
-// });
